@@ -1,6 +1,8 @@
-# Integração com Supabase e Redis
+# Proposta de integração com Supabase e Redis
 
-## O que mudou
+> Este documento descreve uma proposta. O código atual em `src/app.py` usa PostgreSQL diretamente por psycopg2; ainda não implementa o cliente Supabase nem o cache Redis. Execute os comandos abaixo a partir da raiz do projeto somente ao desenvolver essa integração.
+
+## Proposta de integração
 - **Supabase** passa a ser o banco principal (PostgreSQL na nuvem). Tabelas, view,
   function e procedure foram criadas lá rodando o mesmo `database/setup.sql`.
 - **CRUD de produtos e clientes** usa o `supabase-py` (`insert`, `select`, `update`, `delete` + `eq`).

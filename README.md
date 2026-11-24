@@ -25,5 +25,12 @@ Aplicação web para controle de vendas de uma loja: cadastro de produtos e clie
 1. Crie o banco: `createdb -U postgres loja`
 2. Na raiz do projeto, crie os objetos e dados: `psql -U postgres -d loja -f database/setup.sql`
 3. Instale as dependências: `pip install -r src/requirements.txt`
-4. (Opcional) Defina `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`. Padrão: localhost / 5432 / loja / postgres / postgres.
+4. (Opcional) Defina `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`. Padrão: localhost / 5432 / loja / postgres; configure `DB_PASSWORD` com a senha local.
 5. Execute: `cd src && python app.py` e acesse http://127.0.0.1:5000
+
+## Estrutura
+
+- `src/`: aplicação Flask, dependências e templates.
+- `database/`: tabelas, dados de exemplo, função, procedure e view.
+- `docs/integracao-planejada.md`: proposta futura de Supabase e Redis; o código atual usa PostgreSQL diretamente.
+- `.env.example`: referência de configuração. O código atual lê variáveis do ambiente com `os.getenv`; não carrega `.env` automaticamente.
