@@ -1,36 +1,77 @@
-# Sistema de Vendas
+# Loja com Flask e PostgreSQL
 
-## Identificação
-- **Aluno(a):** Guilherme Henrique Macedo Estrela
-- **Disciplina:** Projeto de Banco de Dados
-- **Professor(a):** Anderson Soares
+Sistema acadêmico de vendas com cadastro de clientes e produtos, baixa de estoque, descontos por faixa de valor e relatórios consolidados.
 
-## Sobre o projeto
-Aplicação web para controle de vendas de uma loja: cadastro de produtos e clientes, registro de vendas com baixa automática de estoque, cálculo de desconto por faixa de valor e relatório consolidado de vendas. O banco de dados concentra regras de negócio (desconto, validação de estoque e gravação da venda) e a consolidação dos dados para consulta.
+[![Sintaxe Python](https://github.com/guilhermeestrela10/loja-flask-postgresql/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/guilhermeestrela10/loja-flask-postgresql/actions/workflows/ci.yml)
 
-## Tecnologias utilizadas
-- Python 3 / Flask
-- PostgreSQL 11 ou superior
-- HTML/CSS (templates Jinja2)
-- psycopg2
+[Execução](#executar-localmente) · [Banco de dados](#regras-no-banco) · [Estrutura](#estrutura) · [Limitações](#limitações)
 
-## Banco de dados
-- **SGBD:** PostgreSQL
-- **Principais tabelas:** `clientes`, `produtos`, `vendas`, `itens_venda`
-- **View:** `vw_relatorio_vendas` — junta vendas, clientes, itens e produtos. Usada na tela *Relatório de vendas* e no *Dashboard*.
-- **Function:** `fn_calcular_desconto(subtotal)` — retorna o desconto (5% a partir de R$ 200; 10% a partir de R$ 500). Usada na tela *Nova venda* (botão "Calcular desconto") e dentro da procedure.
-- **Procedure:** `sp_realizar_venda(cliente, produto, quantidade, INOUT venda_id)` — valida estoque, calcula desconto, grava venda e item e baixa o estoque em uma única transação. Chamada pelo botão "Confirmar venda" da tela *Nova venda*.
+## Contexto
 
-## Como executar
-1. Crie o banco: `createdb -U postgres loja`
-2. Na raiz do projeto, crie os objetos e dados: `psql -U postgres -d loja -f database/setup.sql`
-3. Instale as dependências: `pip install -r src/requirements.txt`
-4. (Opcional) Defina `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`. Padrão: localhost / 5432 / loja / postgres; configure `DB_PASSWORD` com a senha local.
-5. Execute: `cd src && python app.py` e acesse http://127.0.0.1:5000
+Projeto de Banco de Dados · Guilherme Henrique Macedo Estrela · Professor Anderson Soares.
+
+O Flask apresenta as telas. O PostgreSQL concentra a validação do estoque, o cálculo de descontos e a gravação da venda.
+
+## Executar localmente
+
+Requisitos: Python 3, PostgreSQL 11+ e utilitários `createdb` e `psql` disponíveis no terminal. Execute na raiz do repositório:
+
+```shell
+git clone https://github.com/guilhermeestrela10/loja-flask-postgresql.git
+cd loja-flask-postgresql
+python -m venv .venv
+```
+
+No PowerShell:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r src/requirements.txt
+createdb -U postgres loja
+psql -U postgres -d loja -f database/setup.sql
+$env:DB_PASSWORD = "SUA_SENHA_LOCAL"
+Set-Location src
+..\.venv\Scripts\python.exe app.py
+```
+
+Abra [localhost:5000](http://127.0.0.1:5000). No Linux/macOS, use `.venv/bin/python` e exporte as variáveis no seu shell.
+
+O script SQL inclui estrutura e dados de exemplo; execute somente em um banco de estudo preparado para este projeto.
+
+### Configuração
+
+| Variável | Uso | Padrão do código |
+| --- | --- | --- |
+| `DB_HOST` | Servidor PostgreSQL | `localhost` |
+| `DB_PORT` | Porta | `5432` |
+| `DB_NAME` | Banco | `loja` |
+| `DB_USER` | Usuário | `postgres` |
+| `DB_PASSWORD` | Senha local | Defina explicitamente |
+
+O [`.env.example`](.env.example) documenta essas variáveis. O código usa `os.getenv` e não carrega `.env` automaticamente.
+
+## Regras no banco
+
+| Objeto | Responsabilidade |
+| --- | --- |
+| `clientes`, `produtos`, `vendas`, `itens_venda` | Dados da aplicação |
+| `vw_relatorio_vendas` | Consolidação de vendas e itens |
+| `fn_calcular_desconto(subtotal)` | Desconto de 5% a partir de R$ 200 e 10% a partir de R$ 500 |
+| `sp_realizar_venda` | Validação de estoque, gravação e baixa em uma transação |
 
 ## Estrutura
 
-- `src/`: aplicação Flask, dependências e templates.
-- `database/`: tabelas, dados de exemplo, função, procedure e view.
-- `docs/integracao-planejada.md`: proposta futura de Supabase e Redis; o código atual usa PostgreSQL diretamente.
-- `.env.example`: referência de configuração. O código atual lê variáveis do ambiente com `os.getenv`; não carrega `.env` automaticamente.
+```text
+src/app.py          Rotas e acesso ao PostgreSQL
+src/templates/      Interface em Jinja2
+src/requirements.txt Dependências Python
+database/           Esquema, dados de exemplo, função, procedure e view
+docs/               Proposta de integração futura
+```
+
+## Verificações
+
+O GitHub Actions verifica a sintaxe Python. Não executa operações de venda nem substitui testes de integração com PostgreSQL.
+
+## Limitações
+
+O servidor de desenvolvimento inicia com debug habilitado, não há autenticação e a chave de sessão é demonstrativa. Execute localmente com dados fictícios. Supabase e Redis aparecem em uma [proposta de integração](docs/integracao-planejada.md), ainda não implementada no código atual.
