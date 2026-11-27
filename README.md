@@ -1,14 +1,14 @@
 # Loja com Flask e PostgreSQL
 
-Sistema acadêmico de vendas com cadastro de clientes e produtos, baixa de estoque, descontos por faixa de valor e relatórios consolidados.
+Sistema de vendas com cadastro de clientes e produtos, baixa de estoque, descontos por faixa de valor e relatórios consolidados.
 
 [![Sintaxe Python](https://github.com/guilhermeestrela10/loja-flask-postgresql/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/guilhermeestrela10/loja-flask-postgresql/actions/workflows/ci.yml)
 
 [Execução](#executar-localmente) · [Banco de dados](#regras-no-banco) · [Estrutura](#estrutura) · [Limitações](#limitações)
 
-## Contexto
+## Visão geral
 
-Projeto de Banco de Dados · Guilherme Henrique Macedo Estrela · Professor Anderson Soares.
+Desenvolvido por Guilherme Henrique Macedo Estrela.
 
 O Flask apresenta as telas. O PostgreSQL concentra a validação do estoque, o cálculo de descontos e a gravação da venda.
 
